@@ -13,8 +13,17 @@ def plot_image(img, title):
     ax1.set_title(title)
     ax1.axis('off')
 
+
 def split_layers_to_3(im):
     return [im[: , :, channel] for channel in range(3)]
+
+
+def avg_image(im):
+    lay1, lay2, lay3  = split_layers_to_3(im)
+
+    avgd = (1./3.)*lay1 + (1./3.)*lay2 + (1./3.)*lay3
+    return avgd.astype(int)
+
 
 def plot_histogram(x, title):
     fig, ax = plt.subplots()
@@ -37,6 +46,38 @@ def plot_histogram(x, title):
     sns.distplot(x_, color='b', bins=75)
 
     plt.show()
+
+def convert_to_grayscale(im):
+    gray = rgb2gray(im)
+    gray = 255 * gray
+    return gray.astype(np.uint8)
+
+def plot_histograms(im, title, images=False):
+    gray = convert_to_grayscale(im)
+
+    avgd_img = avg_image(im)
+
+    R, G, B = split_layers_to_3(im)
+
+    if images==True:
+        plot_image(gray, 'grayscale/luminance (weighted channels)')
+    plot_histogram(gray, f'{title[0:-1]}: Luminosity Histogram')
+
+    if images==True:
+        plot_image(avgd_img, '3 channels averaged to 1 channel')
+    plot_histogram(avgd_img, f'{title[0:-1]}: Averaged Histogram')
+
+    if images==True:
+        plot_image(R, 'Red Channel')
+    plot_histogram(R, f'{title[0:-1]}: Reds Histogram')
+
+    if images==True:
+        plot_image(G, 'Green Channel')
+    plot_histogram(G, f'{title[0:-1]}: Greens Histogram')
+
+    if images==True:
+        plot_image(B, 'Blue Channel')
+    plot_histogram(B, f'{title[0:-1]}: Blues Histogram')
 
 
 
