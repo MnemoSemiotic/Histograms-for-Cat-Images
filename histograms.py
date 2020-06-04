@@ -32,25 +32,29 @@ def plot_histogram(x, title):
     mu_ = np.mean(x)
 
     x_ = np.ravel(x)
-    min_ = x_.min()
-    max_ = x_.max()
-    range = max_ - min_
+    min = x_.min()
+    max = x_.max()
+    range = max - min
 
-    count, bins, ignored = ax.hist(x_, 300, density=True)
+    _, bins, _ = ax.hist(x_, 300, density=True)
 
-    ax.set_xlabel(f'bins with fit line, plotted against precise values')
+    bins = int(range / 3.5)
+
+    ax.set_xlabel('{} bins with fit line, plotted against precise values'.format(bins))
     ax.set_ylabel('Probability Density')
-    ax.set_title(r'{0}: $\mu=${1:.3f}, $\sigma=${2:.3f}'.format(title, mu_, sigma_))
+    ax.set_title(r'{0}: $\mu=${1:.3f}, $\sigma=${2:.3f}'.format(title.split('/')[-1], mu_, sigma_))
 
     sns.set_style('darkgrid')
-    sns.distplot(x_, color='b', bins=75)
+    sns.distplot(x_, color="b", bins=75)
 
     plt.show()
+
 
 def convert_to_grayscale(im):
     gray = rgb2gray(im)
     gray = 255 * gray
     return gray.astype(np.uint8)
+
 
 def plot_histograms(im, title, images=False):
     gray = convert_to_grayscale(im)
@@ -61,7 +65,7 @@ def plot_histograms(im, title, images=False):
 
     if images==True:
         plot_image(gray, 'grayscale/luminance (weighted channels)')
-    plot_histogram(gray, f'{title[0:-1]}: Luminosity Histogram')
+    plot_histogram(gray, f'{title}: Luminosity Histogram')
 
     if images==True:
         plot_image(avgd_img, '3 channels averaged to 1 channel')
@@ -78,8 +82,6 @@ def plot_histograms(im, title, images=False):
     if images==True:
         plot_image(B, 'Blue Channel')
     plot_histogram(B, f'{title[0:-1]}: Blues Histogram')
-
-
 
 
 if __name__ == "__main__":
